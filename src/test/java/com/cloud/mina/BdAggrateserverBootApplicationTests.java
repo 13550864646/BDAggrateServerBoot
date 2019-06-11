@@ -1,4 +1,4 @@
-package com.cloud.bigdata.bdaggrateserverboot;
+package com.cloud.mina;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
