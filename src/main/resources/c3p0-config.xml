@@ -3,7 +3,7 @@
     <default-config>
         <property name="driverClass">com.mysql.jdbc.Driver</property>
         <property name="jdbcUrl">
-            jdbc:mysql://localhost:3306/aggregate?useUnicode=ture&characterEncoding=UTF-8
+            jdbc:mysql://192.168.10.3:3306/aggregate
         </property>
         <!--用户名。Default: null-->
         <property name="user">root</property>

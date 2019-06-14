@@ -3,6 +3,9 @@ package com.cloud.mina.component.unit_a.sport;
 import com.cloud.mina.component.filter.UnitASportComponent;
 import com.cloud.mina.unit_a.sportpackage.LoginPacket;
 import com.cloud.mina.unit_a.sportpackage.PackageData;
+import com.cloud.mina.util.DateUtil;
+import com.cloud.mina.util.DeviceIDResolver;
+import com.cloud.mina.util.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +26,7 @@ public class SportLoginParser extends UnitASportComponent {
     public PackageData generateRealPackageData(IoBuffer buffer) {
         log.info(this.getClass().getSimpleName() + ".generateRealPackageData()begin ...");
         LoginPacket data = new LoginPacket();
-        data.setDeviceID(DeviceIDResolver.getDeviceIDFrornBytes(buffer.array(), 10));
+        data.setDeviceID(DeviceIDResolver.getDeviceIDFromBytes(buffer.array(), 10));
         data.setPatientID(DeviceIDResolver.searchPatientidByDeviceid(data.getDeviceID()));
         data.setAppType(DeviceIDResolver.searchAppTypeByDeviced(data.getDeviceID()));
         data.setLoginTime(DateUtil.getCurrentTime());

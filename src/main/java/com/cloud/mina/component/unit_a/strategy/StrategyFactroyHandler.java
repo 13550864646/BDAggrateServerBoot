@@ -1,17 +1,26 @@
 package com.cloud.mina.component.unit_a.strategy;
 
 import com.cloud.mina.unit_a.sportpackage.PackageData;
+import com.cloud.mina.util.DeviceIDResolver;
+import com.cloud.mina.util.HttpClientUtil;
+import com.cloud.mina.util.Logger;
+import com.cloud.mina.util.PropertiesReader;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.lang.StringUtils;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * mina 的工ohandler 自定义扩展类
+ * mina 的iohandler 自定义扩展类
  */
 public class StrategyFactroyHandler extends IoHandlerAdapter {
+    private static org.apache.log4j.Logger log = Logger.getLogger(DeviceIDResolver.class);
     //    定义变量区域
     public MHDataPacketHandleStrategy chain = null;
     PackageData packet = null;
@@ -25,7 +34,7 @@ public class StrategyFactroyHandler extends IoHandlerAdapter {
          * sports和bloodpressure
          */
         classMap.put("sports", UnitASportsPacketHandleStrategy.class);
-        classMap.put("bloodpressure", UnitABloodPressurePacketHandleStrategy.class);
+//        classMap.put("bloodpressure", UnitABloodPressurePacketHandleStrategy.class);
     }
 
     public void messageReceived(IoSession session, Object message) throws Exception {
@@ -34,22 +43,41 @@ public class StrategyFactroyHandler extends IoHandlerAdapter {
             packet = (PackageData) message;
 //            2.调用具体设备处理
             chain = (MHDataPacketHandleStrategy) classMap.get(packet.getName()).newInstance();
+//            springBoot版本
             if (chain != null) {
                 chain.handle(session, message);
             }
 //            发送给转发服务
             try {
-                Message responseMes = restTemplate.getForObject("http://BOOT- DISPATCH/sendData?appType=" + packet.getAppType() + " & dataType ="
-                        + packet.getType(), Message.class);
+                Message responseMes = restTemplate.getForObject("http : //BOOT-DISPATCH/sendData?appType= " + packet.getAppType() + " &dataType=" + packet.getType(), Message.class);
                 if (responseMes != null && responseMes.getCode() == 1001) {
-//                  发送成功
                     Logger.writeLog("发送数据成功");
                 } else {
                     Logger.writeLog("发送数据失败");
                 }
-            } catch (Exception e) {
-                Logger.errorLog("连接转发服务异常,转发服务地址为 http //BOOT- DISPATCH");
+            }catch (Exception e){
+                e.printStackTrace();
+                Logger.errorLog("连接转发服务异常 转发服务地址为 http //BOOT- DISPATCH");
             }
+
+//            springMVC版本
+//            if (chain != null) {
+//                chain.handle(session, message);
+//                String dispatchPath = PropertiesReader.getProp("DISPATCH_SERVER_PATH");
+//                if (StringUtils.isNotBlank(dispatchPath)) {
+////                    参数拼接
+//                    List<NameValuePair> urlParameters = new ArrayList<>();
+//                    urlParameters.add(new NameValuePair("appType", packet.getAppType()));
+//                    urlParameters.add(new NameValuePair("data Type", packet.getType()));
+////                    数据发送给转发服务
+//                    boolean sendSuccess = HttpClientUtil.sendHttpData(this.getClass().getName(), dispatchPath, urlParameters.toArray(new NameValuePair[urlParameters.size()]));
+//                    if (!sendSuccess) {
+//                        log.error("数据发送到转发服务失败，转发服务路径为" + dispatchPath + "， 数据为 " + packet.toString());
+//                    } else {
+//                        log.error("转发服务路径没配置");
+//                    }
+//                }
+//            }
         }
     }
 

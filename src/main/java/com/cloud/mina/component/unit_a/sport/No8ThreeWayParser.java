@@ -3,6 +3,9 @@ package com.cloud.mina.component.unit_a.sport;
 import com.cloud.mina.component.filter.UnitASportComponent;
 import com.cloud.mina.unit_a.sportpackage.No8ThreeWayPacket;
 import com.cloud.mina.unit_a.sportpackage.PackageData;
+import com.cloud.mina.util.DataTypeChangeHelper;
+import com.cloud.mina.util.DateUtil;
+import com.cloud.mina.util.DeviceIDResolver;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +13,7 @@ import org.springframework.stereotype.Component;
  * un tA 公司智能终端运动数据包（ 号包）解码器
  */
 @Component
-public class NoBThreeWayParser extends UnitASportComponent {
+public class No8ThreeWayParser extends UnitASportComponent {
     @Override
     public boolean check(IoBuffer buffer) {
         if (buffer.get(8) == 8 && buffer.get(9) == 3) {
@@ -68,10 +71,10 @@ public class NoBThreeWayParser extends UnitASportComponent {
         level3_b[0] = buffer.get(42);
         level4_b[1] = buffer.get(43);
         level4_b[0] = buffer.get(44);
-        long kcal = DataTypeChangeHelper.unsigned4BytesToint(kcal_b, 0);
-        long step = DataTypeChangeHelper.unsigned4BytesToint(step_b, 0);
-        long effective_step = DataTypeChangeHelper.unsigned4BytesToint(effective_step_b, 0);
-        long distance = DataTypeChangeHelper.unsigned4BytesToint(distance_b, 0);
+        long kcal = DataTypeChangeHelper.unsigned4BytesToInt(kcal_b, 0);
+        long step = DataTypeChangeHelper.unsigned4BytesToInt(step_b, 0);
+        long effective_step = DataTypeChangeHelper.unsigned4BytesToInt(effective_step_b, 0);
+        long distance = DataTypeChangeHelper.unsigned4BytesToInt(distance_b, 0);
         int levell = DataTypeChangeHelper.byte2int(level1_b) * 2;
         int level2 = DataTypeChangeHelper.byte2int(level2_b) * 2;
         int level3 = DataTypeChangeHelper.byte2int(level3_b) * 2;

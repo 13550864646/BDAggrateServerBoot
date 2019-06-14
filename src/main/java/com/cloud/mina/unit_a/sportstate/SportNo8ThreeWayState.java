@@ -8,6 +8,7 @@ import org.apache.mina.core.session.IoSession;
  * unitA 公司智能终端运动数据包（3号包）状态处理类
  */
 public class SportNo8ThreeWayState implements SportsPacketHandleState {
+    @Override
     public boolean handlePacket(IoSession session, Object message) {
         No8ThreeWayPacket packet = null;
         if (message != null && message instanceof No8ThreeWayPacket) {

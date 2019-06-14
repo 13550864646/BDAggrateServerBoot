@@ -1,6 +1,9 @@
 package com.cloud.mina.unit_a.sportstate;
 
 import com.cloud.mina.unit_a.sportpackage.LoginPacket;
+import com.cloud.mina.util.DataTypeChangeHelper;
+import com.cloud.mina.util.Logger;
+import com.cloud.mina.util.MLinkCRC;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 
@@ -10,6 +13,7 @@ import java.util.Calendar;
  * unitA 公司智能终端运动数据包（ 号包）登录状态处理类
  */
 public class SportNo1LoginState implements SportsPacketHandleState {
+    @Override
     public boolean handlePacket(IoSession session, Object message) {
         LoginPacket packet = null;
         if (message != null && message instanceof LoginPacket) {
@@ -71,7 +75,7 @@ public class SportNo1LoginState implements SportsPacketHandleState {
         ack[14] = hour_b[0];
         ack[15] = minute_b[0];
         ack[16] = seeond_b[0];
-        crc_c = MLinkCRC.crcl6(ack);
+        crc_c = MLinkCRC.crc16(ack);
         ack[17] = crc_c[0];
         ack[18] = crc_c[1];
         return ack ;

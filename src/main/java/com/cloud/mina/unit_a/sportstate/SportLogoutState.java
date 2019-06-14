@@ -1,6 +1,8 @@
 package com.cloud.mina.unit_a.sportstate;
 
 import com.cloud.mina.unit_a.sportpackage.LogoutPacket;
+import com.cloud.mina.util.Logger;
+import com.cloud.mina.util.MLinkCRC;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 
@@ -8,6 +10,7 @@ import org.apache.mina.core.session.IoSession;
  * unitA 公司智能终端运动退出登录处理状态类
  */
 public class SportLogoutState implements SportsPacketHandleState {
+    @Override
     public boolean handlePacket(IoSession session, Object message) {
         if (message != null && message instanceof LogoutPacket) {
             Logger.writeLog("logout package be handled patientID:" + session.getAttribute("patientId") + " company :" + session.getAttribute("company") + "device id:" + session.getAttribute("deviceid"));

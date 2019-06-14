@@ -3,6 +3,9 @@ package com.cloud.mina.component.unit_a.sport;
 import com.cloud.mina.component.filter.UnitASportComponent;
 import com.cloud.mina.unit_a.sportpackage.No8TwoWayPacket;
 import com.cloud.mina.unit_a.sportpackage.PackageData;
+import com.cloud.mina.util.DataTypeChangeHelper;
+import com.cloud.mina.util.DateUtil;
+import com.cloud.mina.util.DeviceIDResolver;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +25,7 @@ public class No8TwoWayParser extends UnitASportComponent {
     @Override
     public PackageData generateRealPackageData(IoBuffer buffer) {
         log.info(this.getClass().getSimpleName() + ".generateRealPackageData()begin ...");
-        String prefix = DeviceIDResolve.getNo8PackageDevicePrefix(buffer.array());
+        String prefix = DeviceIDResolver.getNo8PackageDevicePrefix(buffer.array());
         No8TwoWayPacket packet = null;
         packet = handle5MinutesDetailPacket(buffer);
         log.info(this.getClass().getSimpleName() + " .generateRealPackageData()end.");
@@ -47,7 +50,7 @@ public class No8TwoWayParser extends UnitASportComponent {
         length[1] = buffer.get(5);
         length[2] = buffer.get(6);
         length[3] = buffer.get(7);
-        long lengthvalue = DataTypeChangeHelper.unsigned4BytesToint(length, 0);
+        long lengthvalue = DataTypeChangeHelper.unsigned4BytesToInt(length, 0);
         String deviceID = DeviceIDResolver.getDeviceIDFromBytes(buffer.array(), (int) (lengthvalue - 18));
         String patientID = DeviceIDResolver.searchPatientidByDeviceid(deviceID);
         String company = DeviceIDResolver.searchCompanyByDeviceid(deviceID);
